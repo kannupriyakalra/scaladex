@@ -5,8 +5,7 @@ import com.typesafe.scalalogging.LazyLogging
 import scaladex.core.model.{Artifact, ArtifactDependency, BinaryVersion, Java, Jvm, Language, License, Project, SbtPlugin, Scala, SemanticVersion}
 import scaladex.core.model.ArtifactDependency.Scope
 import scaladex.data.cleanup._
-import scaladex.data.maven.ArtifactModel
-import scaladex.data.maven.SbtPluginTarget
+import scaladex.data.maven.{ArtifactModel, Dependency, SbtPluginTarget}
 import scaladex.infra.DataPaths
 
 private case class ArtifactMeta(
@@ -42,7 +41,7 @@ class ArtifactConverter(paths: DataPaths) extends LazyLogging {
         meta.isNonStandard,
         meta.binaryVersion.platform,
         meta.binaryVersion.language,
-        languageToScalaVersion(meta.binaryVersion.language)
+        extractScalaVersion(pom)
       )
       val dependencies = pom.dependencies.map { dep =>
         ArtifactDependency(
@@ -54,11 +53,21 @@ class ArtifactConverter(paths: DataPaths) extends LazyLogging {
       (artifact, dependencies)
     }
   }
-  def languageToScalaVersion(language: Language): Option[SemanticVersion] = {
-    language match {
-      case Scala(version) => Some(version)
-      case Java => None
+
+  private def extractScalaVersion(pom: ArtifactModel): Option[SemanticVersion] = {
+    val scalaDependencies = pom.dependencies.filter { dep =>
+      dep.groupId == "org.scala-lang" &&
+        (dep.artifactId == "scala-library" || dep.artifactId == "scala3-library_3")
     }
+
+    val sortedScalaDependencies = scalaDependencies.sortBy(_.artifactId)
+    val fullScalaVersion = scalaDependencies match {
+      case _ :: _ :: _ => Some(sortedScalaDependencies.last.version)
+      case head :: Nil => Some(head.version)
+      case _ => None
+    }
+
+    fullScalaVersion.flatMap(SemanticVersion.parse)
   }
 
   /**
@@ -115,7 +124,7 @@ class ArtifactConverter(paths: DataPaths) extends LazyLogging {
       // For example: io.gatling
       case Some(BinaryVersionLookup.FromDependency) =>
         for {
-          dep <- pom.dependencies.find { dep =>
+          dep: Dependency <- pom.dependencies.find { dep =>
             dep.groupId == "org.scala-lang" &&
             (dep.artifactId == "scala-library" || dep.artifactId == "scala3-library_3")
           }
