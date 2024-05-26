@@ -75,17 +75,15 @@ object Values {
           contributors = Seq(contributor("olafurpg"), contributor("scala-steward"))
         )
     val settings: Settings = Settings(
-      defaultStableVersion = false,
+      preferStableVersion = false,
       defaultArtifact = None,
-      strictVersions = false,
       customScalaDoc = None,
       documentationLinks = List(),
-      deprecated = false,
       contributorsWanted = false,
-      artifactDeprecations = Set(),
+      deprecatedArtifacts = Set(),
       cliArtifacts = Set(),
       category = Some(Category.LintingAndRefactoring),
-      beginnerIssuesLabel = None
+      chatroom = None
     )
     val project: Project =
       Project.default(reference, None, Some(githubInfo), Some(settings), now = now)
@@ -120,11 +118,10 @@ object Values {
         Scope("compile")
       )
     val githubInfo: GithubInfo = GithubInfo.empty
-    val settings: Project.Settings =
-      Project.Settings.default.copy(
-        defaultArtifact = Some(artifact.artifactName),
-        category = Some(Category.Json)
-      )
+    val settings: Project.Settings = Project.Settings.empty.copy(
+      defaultArtifact = Some(artifact.artifactName),
+      category = Some(Category.Json)
+    )
   }
 
   object Cats {
@@ -138,7 +135,6 @@ object Values {
         stars = Some(4337),
         forks = Some(1081),
         contributingGuide = Some(Url("https://github.com/typelevel/cats/blob/main/CONTRIBUTING.md")),
-        chatroom = Some(Url("https://gitter.im/typelevel/cats")),
         openIssues = List(issueAboutFoo, issueAboutBar),
         contributors = Seq(contributor("travisbrown"), contributor("ceedub"), contributor("kailuowang")),
         commitActivity = Seq(GithubCommitActivity(25, Instant.now, IndexedSeq(0, 3, 4, 0, 5, 6, 7)))
@@ -255,6 +251,11 @@ object Values {
     val mavenReference: MavenReference =
       MavenReference("org.portable-scala", "sbt-scalajs-crossproject_2.12_1.0", "1.3.2")
     val creationDate: Instant = Instant.ofEpochSecond(1688667180L)
+  }
+
+  object Scala3 {
+    val organization: Project.Organization = Project.Organization("scala")
+    val reference: Project.Reference = Project.Reference.from("scala/scala3")
   }
 
   private def contributor(login: String): GithubContributor =

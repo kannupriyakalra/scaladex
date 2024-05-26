@@ -23,7 +23,7 @@ lazy val loggingSettings = Seq(
     "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
   ),
   // Drop and replace commons-logging with slf4j
-  libraryDependencies += "org.slf4j" % "jcl-over-slf4j" % "2.0.12",
+  libraryDependencies += "org.slf4j" % "jcl-over-slf4j" % "2.0.13",
   excludeDependencies += ExclusionRule("commons-logging", "commons-logging")
 )
 
@@ -65,11 +65,11 @@ lazy val infra = project
     scalacOptionsSettings,
     loggingSettings,
     libraryDependencies ++= Seq(
-      "com.sksamuel.elastic4s" %% "elastic4s-client-esjava" % V.elastic4s,
+      "nl.gn0s1s" %% "elastic4s-client-esjava" % V.elastic4s,
       "org.flywaydb" % "flyway-core" % "8.5.13", // for database migration
       "org.apache.pekko" %% "pekko-stream" % V.pekko,
       "org.apache.pekko" %% "pekko-http" % V.pekkoHttp,
-      "com.github.pjfanning" %% "pekko-http-circe" % "2.4.0",
+      "com.github.pjfanning" %% "pekko-http-circe" % "2.5.0",
       "io.get-coursier" %% "coursier" % V.coursier,
       "io.get-coursier" %% "coursier-sbt-maven-repository" % V.coursier,
       "org.tpolecat" %% "doobie-scalatest" % V.doobie % Test,
@@ -171,9 +171,9 @@ lazy val server = project
       "org.webjars" % "bootstrap-switch" % "3.3.4",
       "org.webjars" % "bootstrap-select" % "1.13.18",
       "org.webjars" % "chartjs" % "3.9.1",
-      "org.webjars.npm" % "date-fns" % "2.30.0",
+      "org.webjars.npm" % "date-fns" % "3.6.0",
       "org.webjars.npm" % "chartjs-adapter-date-fns" % "3.0.0",
-      "org.webjars" % "font-awesome" % "6.5.1",
+      "org.webjars" % "font-awesome" % "6.5.2",
       "org.webjars" % "jquery" % "3.7.1",
       "org.webjars.bower" % "select2" % "4.0.13"
     ),
@@ -240,10 +240,10 @@ lazy val V = new {
   val playJson = "2.9.4"
   val pekko = "1.0.2"
   val pekkoHttp = "1.0.1"
-  val elastic4s = "8.11.5"
+  val elastic4s = "8.12.0"
   val nscalaTime = "2.32.0"
   val scalatest = "3.2.18"
-  val circe = "0.14.6"
+  val circe = "0.14.7"
   val json4s = "4.0.7"
   val coursier = "2.1.6"
 }

@@ -1,14 +1,18 @@
 # Scaladex
 
 ![CI](https://github.com/scalacenter/scaladex/actions/workflows/ci.yml/badge.svg)
-[![Gitter](https://img.shields.io/gitter/room/scalacenter/scaladex.svg?style=flat-square)](https://gitter.im/scalacenter/scaladex)
+![GitHub Discussions](https://img.shields.io/github/discussions/scalacenter/scaladex)
 
 Scaladex is the website where the open source Scala libraries are indexed.
 Its main purpose is to help Scala developers find useful libraries and to help library authors promote their libraries and find new contributors.
 
 ## Acknowledgments
 
-<a title="Scala Center" href="https://scala.epfl.ch/"><img alt="Scala Center" src="https://scala.epfl.ch/resources/img/scala-center-logo-black.png" height="60" /></a>
+<picture>
+    <source media="(prefers-color-scheme: light)" srcset="https://scala.epfl.ch/resources/img/scala-center-logo-black.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://scala.epfl.ch/resources/img/scala-center-logo.png">
+    <img alt="Scala Center" src="https://scala.epfl.ch/resources/img/scala-center-logo.png" height="60">
+</picture>
 
 This project is funded by the <a title="Scala Center" href="https://scala.epfl.ch/">Scala Center</a>.
 
@@ -57,7 +61,7 @@ Read [How to improve the visibility of your project](doc/user/improve-visibility
 
 ## How to contribute
 
-Join the [gitter.im channel](https://gitter.im/scalacenter/scaladex) and read the [Contributing Guide](/CONTRIBUTING.md)
+Read the [Contributing Guide](/CONTRIBUTING.md) and use [Github Discussions](https://github.com/scalacenter/scaladex/discussions) for doubts.
 
 ## Badges
 

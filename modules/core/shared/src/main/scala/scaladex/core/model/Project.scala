@@ -18,6 +18,12 @@ case class Project(
 
   def githubLink: String = s"https://github.com/$reference"
 
+  def communityLinks: Seq[LabeledLink] =
+    githubInfo.flatMap(_.codeOfConduct).map(l => l.labeled("Code of Conduct")).toSeq ++
+      globalDocumentation ++
+      settings.chatroom.map(LabeledLink("Chatroom", _)) ++
+      githubInfo.flatMap(_.contributingGuide).map(l => l.labeled("Contributing Guide"))
+
   /**
    * This is used in twitter to render the card of a scaladex project link.
    */
@@ -38,16 +44,16 @@ case class Project(
     image = githubInfo.flatMap(_.logo).orElse(Some(Url("https://index.scala-lang.org/assets/img/scaladex-brand.svg")))
   )
 
-  def scaladoc(artifact: Artifact): Option[DocumentationLink] =
+  def scaladoc(artifact: Artifact): Option[LabeledLink] =
     settings.customScalaDoc
       .map(DocumentationPattern("Scaladoc", _).eval(artifact))
-      .orElse(artifact.defaultScaladoc.map(DocumentationLink("Scaladoc", _)))
+      .orElse(artifact.defaultScaladoc.map(LabeledLink("Scaladoc", _)))
 
-  def globalDocumentation: Seq[DocumentationLink] =
-    settings.customScalaDoc.flatMap(DocumentationPattern("Scaladoc", _).eval).toSeq ++
-      settings.documentationLinks.flatMap(_.eval)
+  private def globalDocumentation: Seq[LabeledLink] =
+    settings.customScalaDoc.flatMap(DocumentationPattern("Scaladoc", _).asGlobal).toSeq ++
+      settings.documentationLinks.flatMap(_.asGlobal)
 
-  def artifactDocumentation(artifact: Artifact): Seq[DocumentationLink] =
+  def artifactDocumentation(artifact: Artifact): Seq[LabeledLink] =
     scaladoc(artifact).toSeq ++ settings.documentationLinks.map(_.eval(artifact))
 }
 
@@ -84,21 +90,19 @@ object Project {
       githubStatus = githubInfo.map(_ => GithubStatus.Ok(now)).getOrElse(GithubStatus.Unknown(now)),
       githubInfo = githubInfo,
       creationDate = creationDate,
-      settings = settings.getOrElse(Settings.default)
+      settings = settings.getOrElse(Settings.empty)
     )
 
   case class Settings(
-      defaultStableVersion: Boolean,
+      preferStableVersion: Boolean,
       defaultArtifact: Option[Artifact.Name],
-      strictVersions: Boolean,
       customScalaDoc: Option[String],
       documentationLinks: Seq[DocumentationPattern],
-      deprecated: Boolean,
       contributorsWanted: Boolean,
-      artifactDeprecations: Set[Artifact.Name],
+      deprecatedArtifacts: Set[Artifact.Name],
       cliArtifacts: Set[Artifact.Name],
       category: Option[Category],
-      beginnerIssuesLabel: Option[String]
+      chatroom: Option[String]
   )
 
   case class Organization private (value: String) extends AnyVal {
@@ -117,18 +121,16 @@ object Project {
   }
 
   object Settings {
-    val default: Settings = Settings(
-      defaultStableVersion = true,
+    val empty: Settings = Settings(
+      preferStableVersion = true,
       defaultArtifact = None,
-      strictVersions = false,
       customScalaDoc = None,
       documentationLinks = List(),
-      deprecated = false,
       contributorsWanted = false,
-      artifactDeprecations = Set(),
+      deprecatedArtifacts = Set(),
       cliArtifacts = Set(),
       category = None,
-      beginnerIssuesLabel = None
+      chatroom = None
     )
   }
 }
