@@ -172,10 +172,22 @@ object Values {
       )
     }
 
-    val `core_3:2.6.1`: Artifact = getArtifact("cats-core", `_3`, `2.6.1`, description = Some("Cats core"), fullScalaVersion = SemanticVersion.parse("3.0.0"))
+    val `core_3:2.6.1`: Artifact = getArtifact(
+      "cats-core",
+      `_3`,
+      `2.6.1`,
+      description = Some("Cats core"),
+      fullScalaVersion = SemanticVersion.parse("3.0.0")
+    )
     val `core_2.13:2.6.1`: Artifact = getArtifact("cats-core", `_2.13`, `2.6.1`, description = Some("Cats core"))
     val `core_3:4`: Artifact = getArtifact("cats-core", `_3`, `4`, description = Some("Cats core"))
-    val `core_3:2.7.0`: Artifact = getArtifact("cats-core", `_3`, `2.7.0`, description = Some("Cats core"), fullScalaVersion = SemanticVersion.parse("3.0.2"))
+    val `core_3:2.7.0`: Artifact = getArtifact(
+      "cats-core",
+      `_3`,
+      `2.7.0`,
+      description = Some("Cats core"),
+      fullScalaVersion = SemanticVersion.parse("3.0.2")
+    )
 
     val `core_sjs1_3:2.6.1`: Artifact = getArtifact("cats-core", `_sjs1_3`, `2.6.1`, description = Some("Cats core"))
     val `core_sjs06_2.13:2.6.1`: Artifact =
